@@ -7,14 +7,14 @@ commit = subprocess.check_output(["git", "log", "-1", "--format=%H"]).strip().de
 
 # Load private key
 with open("student_private.pem", "rb") as f:
-    private_key = serialization.load_pem_private_key(f.read(), password=None)
+    private_key = serialization.load_pem_private_key(f.read(), password=b"")
 
 # Sign commit hash using RSA-PSS SHA256
 signature = private_key.sign(
     commit.encode("utf-8"),
     padding.PSS(
         mgf=padding.MGF1(hashes.SHA256()),
-        salt_length=padding.PSS.MAX_LENGTH
+        salt_length=32
     ),
     hashes.SHA256()
 )
